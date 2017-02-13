@@ -77,7 +77,8 @@ void parse(char* line, command_t* p_cmd){
 		i = i + argLength;
 		while(line[i] == ' '){
 			i++;
-		}		
+		}
+		args[argMan][argLength] = '\0';		
 		argMan++;
 	}
 	

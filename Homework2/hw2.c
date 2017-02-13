@@ -42,6 +42,7 @@ int main( int argc, char** argv ) {
 	while(!done){
 		printf("$ ");
 		fgets(line, sizeof(line), stdin);
+		//printf("line = %s\n", line);
 
 		if (line[0] != '\n'){
 			parse(line, &cmd);
