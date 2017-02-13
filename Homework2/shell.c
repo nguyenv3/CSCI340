@@ -91,7 +91,7 @@ void parse(char* line, command_t* p_cmd){
 	
 
 	(*p_cmd).name = args[0];
-	printf("ARGS ZERO IS %s\n", args[0]);
+	//printf("ARGS ZERO IS %s\n", args[0]);
 	(*p_cmd).argc = argCount;
 	(*p_cmd).argv = args;
 	//printf("Everything got done peacefully. \n");
@@ -176,7 +176,7 @@ int do_builtin( command_t* p_cmd ){
 		//printf("Did you get here now?\n");
 		found = chdir((*p_cmd).argv[1]);
 		//printf("Found is now:  %d\nAnd argv[1] is: %s\n", found, (*p_cmd).argv[1]);
-		printf("arv[1] = %s\n", (*p_cmd).argv[1]);
+		//printf("arv[1] = %s\n", (*p_cmd).argv[1]);
 		if (found == 0){
 			printf("Successful\n");
 			return SUCCESSFUL;
