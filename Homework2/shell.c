@@ -27,6 +27,7 @@ const char* valid_builtin_commands[] = {"cd", "exit", NULL};
 // int do_builtin(command_t* p_cmd);
 // void cleanup(command_t* p_cmd);
 
+
 int stringsEqual(const char *a,const char *b){
 	int i;
 	for (i = 0; a[i] != '\0' && b[i] != '\0'; i++){
@@ -37,6 +38,7 @@ int stringsEqual(const char *a,const char *b){
 
 	return 1;
 }
+
 
 
 void parse(char* line, command_t* p_cmd){
@@ -67,6 +69,9 @@ void parse(char* line, command_t* p_cmd){
 		for( j = i; j - i < argLength; j++){
 			args[argMan][j-i] = line[j];
 			//printf("line[j] = %d\n", line[j]);
+			//printf("args[argMan][j-i] = ");
+			//printf(args[argMan][j-i]);
+			//printf("\n");
 			
 		}
 		i = i + argLength;
@@ -83,9 +88,9 @@ void parse(char* line, command_t* p_cmd){
 	
 	
 	
-	
+
 	(*p_cmd).name = args[0];
-	//printf("ARGS ZERO IS %s\n", args[0]);
+	printf("ARGS ZERO IS %s\n", args[0]);
 	(*p_cmd).argc = argCount;
 	(*p_cmd).argv = args;
 	//printf("Everything got done peacefully. \n");
@@ -170,9 +175,9 @@ int do_builtin( command_t* p_cmd ){
 		//printf("Did you get here now?\n");
 		found = chdir((*p_cmd).argv[1]);
 		//printf("Found is now:  %d\nAnd argv[1] is: %s\n", found, (*p_cmd).argv[1]);
-		
+		printf("arv[1] = %s\n", (*p_cmd).argv[1]);
 		if (found == 0){
-			printf("Successfull\n");
+			printf("Successful\n");
 			return SUCCESSFUL;
 		}
 		return ERROR;
@@ -185,7 +190,8 @@ void cleanup(command_t* p_cmd){
 	int i;
 
 	for(i = 0; (*p_cmd).argv[i] != NULL; i++){
-	
+		
+		//printf("Cleaning this arg[%d] = %s\n", i, (*p_cmd).argv[i]);	
 		free((*p_cmd).argv[i]);	
 		//printf("I died here.\n");	
 	}
