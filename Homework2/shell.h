@@ -181,4 +181,3 @@ function:
 */
 void cleanup(command_t* p_cmd);
 
-int stringsEqual(const char *a, const char *b);
