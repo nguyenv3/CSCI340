@@ -110,8 +110,7 @@ int execute(command_t* p_cmd){
 			(*p_cmd).argv[i] = NULL;
 			cmd2.argc = (*p_cmd).argc - i - 1;
 			cmd2.argv = &((*p_cmd).argv[i + 1]);
-			cmd2.name = cmd2.argv[0];
-			cmd2.argv = &((*p_cmd).argv[i + 1]);
+			cmd2.name = cmd2.argv[0];		
 			
 		}
 	}
