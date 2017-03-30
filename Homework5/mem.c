@@ -66,6 +66,9 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
            }
          }
        }
+      if(i == (mem_size -1) && count <= size){
+        return -1;
+      }
     }
   }
   else if(strategy == NEXTFIT){
@@ -90,12 +93,39 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
           count--;
         }
       }
+      if(i == (mem_size -1) && count <= size){
+        return -1;
+      }
       if(last_placement_position == (mem_size-1)){
         last_placement_position = 0;
       }
     }
   }
-  
+  else if(strategy == FIRSTFIT){
+    for(i = 0; i < mem_size; i++){
+      if((i !=0 && memory[i] == 0 && memory[i-1] != 0) || (i == 0 && memory[i] == 0)){
+        start = i;
+        block++;
+        count = 0;
+      }
+      if(memory[i] == 0){
+        count++;
+      }
+      else if(memory[i] != 0){
+        count = 0;
+      }
+      if(size <= count){
+        while(count != 0){
+          memory[start] = duration;
+          start++;
+          count--;
+        }
+      }
+      if(i == (mem_size -1) && count <= size){
+        return -1;
+      }
+    }
+  } 
         
   return block;
 }
