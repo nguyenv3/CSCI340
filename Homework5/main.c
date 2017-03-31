@@ -54,9 +54,9 @@ int main(int argc, char** argv){
      exFragBestAvg = exFragTotalBest/simDur;
      numProbeBestAvg = numTotalProbeBest/simDur;
      numAllocFailBestAvg = numAllocFailBest/simDur;
-     
-     mem_single_time_unit_transpired(); 
      mem_print();
+     mem_single_time_unit_transpired(); 
+     //mem_print();
      
      
      //printf("numAllocFailBest = %d\n", numAllocFailBest);
