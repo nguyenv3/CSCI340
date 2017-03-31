@@ -214,7 +214,7 @@ void mem_print(){
   printf("mem_print()\n");
 
   for(i = 0; i < mem_size; i++){
-    printf("|%d|", memory[i]);
+    printf("%d|", memory[i]);
   }
   printf("\n");
 }
