@@ -36,8 +36,8 @@ static int last_placement_position;
  */
 int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
 
-  int i, count, start, block;
-  int best, bestIndex;
+  int i, count = 0, start = 0, block = 0;
+  int best = 0, bestIndex = 0;
   block = 0;
   mem_clear();
   if(strategy == BESTFIT){
