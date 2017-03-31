@@ -39,6 +39,7 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
   int i, count, start, block;
   int best, bestIndex;
   block = 0;
+  mem_clear();
   if(strategy == BESTFIT){
     for(i=0; i < mem_size; i++){
       if((i !=0 && memory[i] == 0 && memory[i-1] != 0) || (i == 0 && memory[i] == 0)){
