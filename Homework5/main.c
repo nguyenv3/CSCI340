@@ -36,6 +36,7 @@ int main(int argc, char** argv){
     for ( j = 0; j < timeUnit; j++ ) {
       size = rand() % MAX_REQUEST_SIZE - MIN_REQUEST_SIZE;
       duration = rand() % MAX_DURATION - MIN_DURATION;
+      //printf("size = %d\n", size);
       bestProbe = mem_allocate( BESTFIT, size, duration);
       if ( bestProbe == -1 ) {
         bestFailTotal += 1;
@@ -62,12 +63,14 @@ int main(int argc, char** argv){
         firstProbeTotal += firstProbe;
       }
       firstFrag = mem_fragment_count(MIN_REQUEST_SIZE - 1);
+      //printf("firstFrag = %d\n", firstFrag);
       firstFragTotal += firstFrag;
       firstFragAvg = firstFragTotal/runs;
       firstProbeAvg = firstProbeTotal/runs;
       firstFailAvg = firstFailTotal/runs;
-      mem_single_time_unit_transpired();
-    }
+      //mem_print();
+      mem_single_time_unit_transpired();      
+      }
     mem_clear();
 
     for ( j = 0; j < timeUnit; j++ ) {

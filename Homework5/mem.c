@@ -40,7 +40,7 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
   int best = 0, bestIndex = 0;
  
   if(strategy == BESTFIT){
-    while (i < mem_size){
+    for(i = 0; i < mem_size; i++){
       if((i != 0 && memory[i] == 0 && memory[i-1] != 0) || ( i == 0 && memory[i] ==0)){
 	
         start = i;
@@ -74,12 +74,12 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
         }
         break;
      }
-     i++;
+  
   }
 }
   
   else if(strategy == NEXTFIT){
-    while(i < mem_size){
+    for( i = 0;i < mem_size; i++){
       if(( i !=0 && memory[i] == 0 && memory[i-1] != 0) || (i == 0 && memory[i] == 0)){
         start= i;
         block++;
@@ -110,7 +110,7 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
         if( last_placement_position == mem_size-1 ) {
           last_placement_position=0;
       	 }
-      i++;
+   
     }
  }
   else if(strategy == FIRSTFIT){
@@ -128,10 +128,10 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
       	else if(memory[i] != 0){
           count = 0;
       	}
-        printf("i = %d\n", i);
-        printf("mem_size = %d\n", mem_size);
+        //printf("i = %d\n", i);
+        //printf("mem_size = %d\n", mem_size);
         if (i == (mem_size-1) && count <= size){
-	  printf("FIRSTFAIL \n);
+	  //printf("FIRSTFAIL \n");
           return -1;
         }
       	if(size <= count){
@@ -141,8 +141,7 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
             count--;
           }
       
-      }
-      i++;
+      }      
     }
 }
   } 
@@ -173,7 +172,7 @@ int mem_single_time_unit_transpired(){
  */
 int mem_fragment_count(int frag_size){
 
-  int i, fragCount = 0, freeCount = 0;
+ int i, fragCount = 0, freeCount = 0;
  
  for ( i = 0; i < mem_size; i ++ ) {
    if ( memory[i] == 0 ) {
@@ -182,6 +181,7 @@ int mem_fragment_count(int frag_size){
    else if ( memory[i] != 0 && memory[i - 1] == 0 && i > 0 ) {
      if ( freeCount < frag_size ) {
        fragCount++;
+       //printf("fragCount = %d\n", fragCount);
      }
      freeCount = 0;
    }
