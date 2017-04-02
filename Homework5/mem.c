@@ -36,55 +36,67 @@ static int last_placement_position;
  */
 int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
 
-  int i, count = 0, start = 0, block = 0;
+  int i = 0, count = 0, start = 0, block = 0;
   int best = 0, bestIndex = 0;
-  block = 0;
-  mem_clear();
+ 
   if(strategy == BESTFIT){
-    for(i=0; i < mem_size; i++){
-      if((i !=0 && memory[i] == 0 && memory[i-1] != 0) || (i == 0 && memory[i] == 0)){
+    while (i < mem_size){
+      if((i != 0 && memory[i] == 0 && memory[i-1] != 0) || ( i == 0 && memory[i] ==0)){
+	
         start = i;
         block++;
         count = 0;
       }
-      
-      if(memory[i] == 0){
+      if (memory[i] == 0){
         count++;
       }
-      else if(memory[i] != 0){
+      else if (memory[i] != 0){
         count = 0;
       }
-      if(size <= count){
-        best = size - count;
-        if(best >= 0 || count < best){
+      if (i == mem_size-1 && count <= size){
+        return -1;
+      }
+      if (size <= count){
+       	best = size - count;
+        if (best >= 0) {
+          bestIndex = start;
+        }
+
+        if (count < best){
           bestIndex = start;
         }
         else{
-          while(count !=0){
+          while (count !=0){
             memory[bestIndex] = duration;
             bestIndex++;
             count--;
-           }
-         }
-       }
-      if(i == (mem_size -1) && count <= size){
-        return -1;
-      }
-    }
+          }
+        }
+        break;
+     }
+     i++;
   }
+}
+  
   else if(strategy == NEXTFIT){
-    for(i = 0; i < mem_size; i++){
-      if((i !=0 && memory[i] == 0 && memory[i-1] != 0) || (i == 0 && memory[i] == 0)){
-        start = i;
+    while(i < mem_size){
+      if(( i !=0 && memory[i] == 0 && memory[i-1] != 0) || (i == 0 && memory[i] == 0)){
+        start= i;
         block++;
         count = 0;
       }
       if(memory[i] == 0){
         count++;
       }
+
       else if(memory[i] != 0){
         count = 0;
       }
+
+      if(i == mem_size-1 && count <= size){
+        return -1;
+      }
+
       if(size <= count){
         last_placement_position = start;
         i = last_placement_position;
@@ -92,40 +104,47 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
           memory[start] = duration;
           start++;
           count--;
-        }
+       	}
+        break;
       }
-      if(i == (mem_size -1) && count <= size){
-        return -1;
-      }
-      if(last_placement_position == (mem_size-1)){
-        last_placement_position = 0;
-      }
+        if( last_placement_position == mem_size-1 ) {
+          last_placement_position=0;
+      	 }
+      i++;
     }
-  }
+ }
   else if(strategy == FIRSTFIT){
-    for(i = 0; i < mem_size; i++){
-      if((i !=0 && memory[i] == 0 && memory[i-1] != 0) || (i == 0 && memory[i] == 0)){
-        start = i;
-        block++;
-        count = 0;
+    if(strategy == FIRSTFIT){
+      for (i = 0; i < mem_size; i++){
+        //printf("Segmentation Fault @ line 119.\n");
+      	if((i != 0 && memory[i] == 0 && memory[i - 1] != 0) || ( i == 0 && memory[i] == 0)){
+          start = i;
+          block++;
+          count = 0;
+      	}
+      	if(memory[i]==0){
+          count++;
+      	}
+      	else if(memory[i] != 0){
+          count = 0;
+      	}
+        printf("i = %d\n", i);
+        printf("mem_size = %d\n", mem_size);
+      	if(i == (mem_size-1)){
+          printf("FIRST FAIL \n");
+          return -1;
+      	}
+      	if(size <= count){
+          while(count !=0){
+            memory[start] = duration;
+            start++;
+            count--;
+          }
+      
       }
-      if(memory[i] == 0){
-        count++;
-      }
-      else if(memory[i] != 0){
-        count = 0;
-      }
-      if(size <= count){
-        while(count != 0){
-          memory[start] = duration;
-          start++;
-          count--;
-        }
-      }
-      if(i == (mem_size -1) && count <= size){
-        return -1;
-      }
+      i++;
     }
+}
   } 
         
   return block;
@@ -154,19 +173,21 @@ int mem_single_time_unit_transpired(){
  */
 int mem_fragment_count(int frag_size){
 
-  int i, fragCount, freeCount;
-  for(i = 0; i < mem_size; i++){
-    if(memory[i]==0){
-      freeCount++;
-    }
-    else if(memory[i] != 0 && memory[i-1] == 0 && i > 0){
-      if(freeCount < frag_size){
-        fragCount++;
-      }
-      freeCount = 0;
-    }
+  int i, fragCount = 0, freeCount = 0;
+ 
+ for ( i = 0; i < mem_size; i ++ ) {
+   if ( memory[i] == 0 ) {
+     freeCount++;
+   }
+   else if ( memory[i] != 0 && memory[i - 1] == 0 && i > 0 ) {
+     if ( freeCount < frag_size ) {
+       fragCount++;
+     }
+     freeCount = 0;
+   }
   }
-  return 0;
+  //printf("fragCount = %d\n", fragCount);
+  return fragCount;
 }
 
 /*

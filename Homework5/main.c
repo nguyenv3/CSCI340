@@ -18,49 +18,92 @@
   with the value 1235.
 */
 
-int main(int argc, char** argv){
-  int i, j,memSize, size, duration, simDur, numRun, randSeed;
-  int exFragBest = 0, numProbeBest = 0, numAllocFailBest = 0, numTotalProbeBest = 0, exFragTotalBest = 0, exFragBestAvg = 0, numProbeBestAvg = 0, numAllocFailBestAvg = 0;
-  int exFragFirst = 0, numProbeFirst = 0, numAllocFailFirst = 0;
-  int exFragNext = 0, numProbeNext = 0, numAllocFailNext = 0;
-  
+int main(int argc, char** argv){  
 
-  memSize = atoi(argv[1]);
-  numRun = atoi(argv[2]);
-  simDur = atoi(argv[3]);
+  int i, j,  physicalMemory, runs, timeUnit, randSeed, size, duration;
+  int firstProbe, firstFrag, firstProbeAvg, firstFragAvg, firstFailAvg, firstProbeTotal = 0,firstFailTotal = 0,	firstFragTotal = 0;
+  int nextProbe, nextFrag, nextProbeAvg, nextFragAvg, nextFailAvg,nextProbeTotals = 0, nextFailTotals = 0, nextFragTotal = 0;
+  int bestProbe, bestFrag, bestProbeAvg, bestFragAvg, bestFailAvg, bestProbeTotal = 0, bestFailTotal = 0, bestTotalFrag = 0;
+
+  physicalMemory = atoi(argv[1]);
+  runs = atoi(argv[2]);
+  timeUnit = atoi(argv[3]);
   randSeed = atoi(argv[4]);
-
-  mem_init(memSize);
+  mem_init(physicalMemory);
   srand(randSeed);
-  
-  for(i = 0; i < simDur; i++){
-    for(j = 0; j < numRun; j++){
-     size = rand() % (MAX_REQUEST_SIZE - MIN_REQUEST_SIZE);
-     duration = rand() % (MAX_DURATION - MIN_DURATION);
-     
-     numProbeBest = mem_allocate(BESTFIT, size, duration);
-     //printf("numProbeBest = %d\n", numProbeBest);
-     if(numProbeBest == -1){
-       numAllocFailBest += 1;
-       printf("ALLOCATION OF BEST FAILED\n");       
-     } 
-    
-     else if(numProbeBest != -1){
-       numTotalProbeBest += numProbeBest;
-     }
 
-     exFragBest = mem_fragment_count(MIN_REQUEST_SIZE -1);
-     exFragTotalBest += exFragBest;
-     exFragBestAvg = exFragTotalBest/simDur;
-     numProbeBestAvg = numTotalProbeBest/simDur;
-     numAllocFailBestAvg = numAllocFailBest/simDur;
-     mem_print();
-     mem_single_time_unit_transpired(); 
-     //mem_print();
-     
-     
-     //printf("numAllocFailBest = %d\n", numAllocFailBest);
+  for ( i = 0; i < runs; i++ ) {
+    for ( j = 0; j < timeUnit; j++ ) {
+      size = rand() % MAX_REQUEST_SIZE - MIN_REQUEST_SIZE;
+      duration = rand() % MAX_DURATION - MIN_DURATION;
+      bestProbe = mem_allocate( BESTFIT, size, duration);
+      if ( bestProbe == -1 ) {
+        bestFailTotal += 1;
+      }
+      else if ( bestProbe != -1 ) {
+	bestProbeTotal += bestProbe;
+      }
+      bestFrag = mem_fragment_count(MIN_REQUEST_SIZE - 1);
+      bestTotalFrag += bestFrag;
+      bestFragAvg = bestTotalFrag/runs;
+      bestProbeAvg = bestProbeTotal/runs;
+      bestFailAvg = bestFailTotal/runs;
+      mem_single_time_unit_transpired();
+      }
+    mem_clear();
+    for ( j = 0; j < timeUnit; j++ ) {
+      size = rand() % MAX_REQUEST_SIZE - MIN_REQUEST_SIZE;
+      duration = rand() % MAX_DURATION - MIN_DURATION;
+      firstProbe = mem_allocate( FIRSTFIT, size, duration);
+      if ( firstProbe == -1 ) {
+        firstFailTotal += 1;
+      }
+      else if ( firstProbe != -1 ) {
+        firstProbeTotal += firstProbe;
+      }
+      firstFrag = mem_fragment_count(MIN_REQUEST_SIZE - 1);
+      firstFragTotal += firstFrag;
+      firstFragAvg = firstFragTotal/runs;
+      firstProbeAvg = firstProbeTotal/runs;
+      firstFailAvg = firstFailTotal/runs;
+      mem_single_time_unit_transpired();
     }
+    mem_clear();
+
+    for ( j = 0; j < timeUnit; j++ ) {
+      size = rand() % MAX_REQUEST_SIZE - MIN_REQUEST_SIZE;
+      duration = rand() % MAX_DURATION - MIN_DURATION;
+      nextProbe = mem_allocate( NEXTFIT, size, duration);
+      if ( nextProbe == -1 ) {
+        nextFailTotals += 1;
+      }
+      else if ( nextProbe != -1 ) {
+        nextProbeTotals += nextProbe;
+      }
+      nextFrag = mem_fragment_count(MIN_REQUEST_SIZE - 1); 
+      nextFragTotal += nextFrag;
+      nextFragAvg = nextFragTotal/runs;
+      nextProbeAvg = nextProbeTotals/runs;
+      nextFailAvg = nextFailTotals/runs;
+      mem_single_time_unit_transpired();
+      }
+    mem_clear();
   }
-  return 0;
+
+  	printf("Best Avg Probes: %d\n", bestProbeAvg);
+  	printf("Best Avg Fails %d\n", bestFailAvg);
+  	printf("Best Avg Frags: %d\n", bestFragAvg);
+  	printf("First Avg Probes: %d\n", firstProbeAvg);
+  	printf("First Avg Fails %d\n", firstFailAvg);
+  	printf("First Avg Frags: %d\n", firstFragAvg);
+  	printf("Next Avg Probes: %d\n", nextProbeAvg);
+  	printf("Next Avg Fails %d\n", nextFailAvg);
+  	printf("Next Avg Frags: %d\n", nextFragAvg);
+
+
+
+
+	mem_free();
+	  
+	return 0;
 }
