@@ -53,7 +53,7 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
       else if (memory[i] != 0){
         count = 0;
       }
-      if (i == mem_size-1 && count <= size){
+      if (i == (mem_size-1) && count <= size){
         return -1;
       }
       if (size <= count){
@@ -93,7 +93,7 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
         count = 0;
       }
 
-      if(i == mem_size-1 && count <= size){
+      if (i == (mem_size-1) && count <= size){
         return -1;
       }
 
@@ -130,10 +130,10 @@ int mem_allocate(mem_strats_t strategy, int size, dur_t duration){
       	}
         printf("i = %d\n", i);
         printf("mem_size = %d\n", mem_size);
-      	if(i == (mem_size-1)){
-          printf("FIRST FAIL \n");
+        if (i == (mem_size-1) && count <= size){
+	  printf("FIRSTFAIL \n);
           return -1;
-      	}
+        }
       	if(size <= count){
           while(count !=0){
             memory[start] = duration;
